@@ -1,9 +1,5 @@
 @charset "UTF-8";
-* {
+#Viewer {
     color: #FFFFFF;
     background-color: #000000;
-}
-html, body, div {
-    margin: 0px;
-    padding: 0px;
 }

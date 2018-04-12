@@ -10,6 +10,8 @@
     <!--
     <link rel="stylesheet" href="style.css">
     -->
+    <link rel="stylesheet" href="split.css">
+    <link rel="stylesheet" href="style_viewer.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.3/ace.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.19/marked.min.js"></script>
@@ -17,36 +19,38 @@
     <script>
     $(document).ready(function(){
 	var editor = ace.edit("Editor");
-	editor.setTheme("ace/theme/monokai");
+	editor.setTheme("ace/theme/twilight");// 唯一背景黒＆箇条書き色分けされる
+	editor.setOptions({
+	    maxLines: Infinity,
+	});
 	editor.setFontSize(14);
 	editor.getSession().setMode("ace/mode/Markdown");
 	editor.getSession().setUseWrapMode(true);
 	editor.getSession().setTabSize(4);
-
+	editor.$blockScrolling = Infinity;
+	editor.on("change", function(e) {
+	    var md = editor.getSession().getValue();
+	    var html = marked(md);
+	    $("#Viewer").html(html);
+	})();
 	$.ajax({
-	    url: "./default.md",
-	}).success(function(data){
+	    url: "./default.md"
+	}).done(function (response, textStatus, jqXHR) {
 	    md = data
 	    editor.setValue(md, -1);
 	    html = marked(md)
 	    $("#Viewer").html(html)
-	}).error(function(data){
-	    $("#Viewer").html("ファイルが見つかりません。")
-	});
-	/*
-	$('#Editor').bind('input propertychange', function() {
-	    md = $("#Editor").val()
-	    html = marked(md)
-	    $("#Viewer").html(html)
-	});
-	*/
+	}).fail(function (jqXHR, textStatus, errorThrown) {
+	    $("#Viewer").html("(./default.md ファイルが取得できませんでした。)")
+	}).always(function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {});
     });
     </script>
     
 </head>
 <body>
-    <!--<textarea id="Editor"></textarea>-->
-    <div id="Editor" style="height: 300px"></div>
-    <div id="Viewer"></div>
+    <div class="wrapper">
+	<div id="Editor" style="height: 300px"></div>
+	<div id="Viewer"></div>
+    </div>
 </body>
 </html>
