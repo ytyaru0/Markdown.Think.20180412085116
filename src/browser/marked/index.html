@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.19/marked.min.js"></script>
+    <!--<script src="script.js"></script>-->
+    <script>
+    $(document).ready(function(){
+	$('#Editor').bind('input propertychange', function() {
+	    md = $("#Editor").val()
+	    html = marked(md)
+	    $("#Viewer").html(html)
+	});
+    });
+    </script>
+    
+</head>
+<body>
+    <textarea id="Editor"></textarea>
+    <div id="Viewer"></div>
+</body>
+</html>
