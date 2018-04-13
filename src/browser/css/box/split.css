@@ -1,4 +1,3 @@
-@charset: "UTF-8"
 .wrapper {
     display: box;
     display: -webkit-box;
@@ -6,7 +5,9 @@
     box-pack: center;
     -webkit-box-pack: center;
     -moz-box-pack: center;
-}#Editor, #Viewer {
-    width: 50vw;
-    height: 100vh;
 }
+#Editor, #Viewer {
+    width: 100%;
+    height: 100%;
+}
+
