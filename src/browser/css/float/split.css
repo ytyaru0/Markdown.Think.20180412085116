@@ -1,0 +1,8 @@
+#Editor {
+    float: left;
+    background-color: #00FF00;
+}
+#Viewer {
+    float: right;
+    background-color: #0000FF;
+}
