@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>jQuery.ajax()</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+    $(document).ready(function(){
+	$.ajax({
+	    url: "./default.md"
+	}).done(function (response, textStatus, jqXHR) {
+	    $("body").html(response)
+	}).fail(function (jqXHR, textStatus, errorThrown) {
+	    $("body").html("(./default.md ファイルが取得できませんでした。)")
+	}).always(function (data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {});
+    });
+    </script>
+    
+</head>
+<body>
+</body>
+</html>
