@@ -9,4 +9,5 @@
 #Editor, #Viewer {
     width: 50vw;
     height: 100vh;
+    overflow: auto;
 }
