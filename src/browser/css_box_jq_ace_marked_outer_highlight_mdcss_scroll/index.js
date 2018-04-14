@@ -55,11 +55,17 @@
 	     * `p`, `h?`タグのときにclass='line'を付与するコード。
 	     * mdHtml.renderer.rules.paragraph_open = mdHtml.renderer.rules.heading_open = injectLineNumbers;
 	     * これを marked.js でできるか？
+	     * 可能だがDRYに書けない。APIの粒度が荒いため、要素ごとにHTML文字列を作成せねばならない。現実的でない。だが、`p`,`h?`の2種類だけなので2メソッドをオーバーライドすれば済む。
+	     * Renderer.prototype.paragraph = function(text) {
+	     * Renderer.prototype.heading = function(text, level, raw) {
 	     */
 	})();
 	editor.session.selection.on("changeCursor", function(e){
 	    var c = editor.selection.getCursor();
 	    console.log('Editor now row,col: ' + c.row +', ' + c.column);
+
+	    // この行までのコードをパースし、そのHTMLの表示高さピクセル数をとる？
+	    // HTMLコードから高さピクセル数を算出するライブラリが欲しい
 	});
 	return editor;
     }
