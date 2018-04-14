@@ -55,25 +55,27 @@
 	})();
 	editor.session.selection.on("changeCursor", function(e){
 	    var c = editor.selection.getCursor();
-	    console.log('Editor now row,col: ' + c.row +', ' + c.column);
+	    //console.log('Editor now row,col: ' + c.row +', ' + c.column);
 	    // 先頭からキャレット位置までのmarkdownを取得する。
 	    //var range = new ace.Range(0,0,c.row,c.column);//列数はその行の末尾にしたい
 	    //var range = new ace.Range(0,0,c.row,-1);//列数はその行の末尾にしたい
 	    var range = new ace.Range(0,0,c.row,editor.getSession().getLine(c.row).length);
+	    //editor.renderer.scrollCursorIntoView(range);
+	    //editor.renderer.scrollToLine(row)
 	    var parser = new DOMParser();
 	    var doc = parser.parseFromString(marked(editor.getSession().getTextRange(range)), 'text/html');
 	    var totalLines = doc.body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
 	    //console.log(range);
-	    console.log(range.toString());
+	    //console.log(range.toString());
 	    //console.log(totalLines);
 
 	    // ビューア側の位置と比較して位置指定する
 	    var body = document.getElementById("Viewer");
 	    var elems = body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
-	    console.log(elems);
-	    console.log(totalLines.length);
-	    console.log(elems[totalLines.length-1]);
-	    console.log(elems[totalLines.length-1].offsetTop);
+	    //console.log(elems);
+	    //console.log(totalLines.length);
+	    //console.log(elems[totalLines.length-1]);
+	    //console.log(elems[totalLines.length-1].offsetTop);
 	    if (elems.length > 0) {
 		$('#Viewer').scrollTop(elems[totalLines.length-1].offsetTop);
 		//var previewWrapper = document.getElementById("previewWrapper");
