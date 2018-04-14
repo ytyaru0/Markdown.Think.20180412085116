@@ -14,25 +14,18 @@
 	renderer.heading = function(text, level, raw) {
 	    sgml = new SgmlWriter();
 	    console.log(sgml);
-	    //opt = {name:'h'+level, text:text};
 	    opt = {name:'h'+level, attrs:{class:'line'}, text:text};
 	    if (this.options.headerIds) {
 		opt['attrs']['id'] = this.options.headerPrefix + raw.toLowerCase().replace(/[^\w]+/g, '-');
-		//opt['attrs'] = {'id': this.options.headerPrefix + raw.toLowerCase().replace(/[^\w]+/g, '-'), 'class': 'line'};
-		//attrs['id'] = this.options.headerPrefix + raw.toLowerCase().replace(/[^\w]+/g, '-');
-		//return sgml.element('h'+level, attrs, text) + '\n';
 		return sgml.element(opt) + '\n';
 	    } else {
-		//html = sgml.element('h'+level, attrs=null, text=text) + '\n';
 		html = sgml.element(opt) + '\n';
 		console.log(html);
 		return sgml.element(opt) + '\n';
-		//return sgml.element('h'+level, attrs=null, text=text) + '\n';
 	    }
 	};
 	renderer.paragraph = function(text) {
 	    sgml = new SgmlWriter();
-	    //return sgml.element('p', {'class': 'line'}, text) + '\n';
 	    return sgml.element({name:'p', attrs:{'class': 'line'}, text:text}) + '\n';
 	};
 	marked.setOptions({
@@ -45,22 +38,15 @@
     function CreateEditor() {
 	var editor = ace.edit("Editor");
 	editor.setTheme("ace/theme/twilight");// 唯一背景黒＆箇条書き色分けされる
-	/*
-	editor.setOptions({
-	    maxLines: Infinity,
-	});
-	*/
 	editor.setFontSize(14);
 	editor.getSession().setMode("ace/mode/markdown");
 	editor.getSession().setUseWrapMode(true);
 	editor.getSession().setTabSize(4);
-	//editor.$blockScrolling = Infinity;
 	editor.focus();
 	editor.on("change", function(e) {
 	    $("#Viewer").html(marked(editor.getSession().getValue()));
 	})();
 	editor.session.on("changeScrollTop", function(scrollTop) {
-	//editor.on("changeScrollTop", function(scrollTop) {
 	    console.log('Editor: ' + scrollTop, + ' line: ' + editor.getFirstVisibleRow() + ' current: ' + editor.selection.getCursor().row)
 
 	    /* 
