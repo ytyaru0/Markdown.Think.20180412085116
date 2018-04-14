@@ -10,6 +10,31 @@
 	renderer.code = function(code, language) {
 	return '<pre><code class="hljs">' + hljs.highlightAuto(code).value + '</code></pre>';
 	};
+	// スクロール連動すべく行数を数えるための布石としてline属性値を挿入する
+	renderer.heading = function(text, level, raw) {
+	    sgml = new SgmlWriter();
+	    console.log(sgml);
+	    //opt = {name:'h'+level, text:text};
+	    opt = {name:'h'+level, attrs:{class:'line'}, text:text};
+	    if (this.options.headerIds) {
+		opt['attrs']['id'] = this.options.headerPrefix + raw.toLowerCase().replace(/[^\w]+/g, '-');
+		//opt['attrs'] = {'id': this.options.headerPrefix + raw.toLowerCase().replace(/[^\w]+/g, '-'), 'class': 'line'};
+		//attrs['id'] = this.options.headerPrefix + raw.toLowerCase().replace(/[^\w]+/g, '-');
+		//return sgml.element('h'+level, attrs, text) + '\n';
+		return sgml.element(opt) + '\n';
+	    } else {
+		//html = sgml.element('h'+level, attrs=null, text=text) + '\n';
+		html = sgml.element(opt) + '\n';
+		console.log(html);
+		return sgml.element(opt) + '\n';
+		//return sgml.element('h'+level, attrs=null, text=text) + '\n';
+	    }
+	};
+	renderer.paragraph = function(text) {
+	    sgml = new SgmlWriter();
+	    //return sgml.element('p', {'class': 'line'}, text) + '\n';
+	    return sgml.element({name:'p', attrs:{'class': 'line'}, text:text}) + '\n';
+	};
 	marked.setOptions({
 	    renderer: renderer,
 	});
