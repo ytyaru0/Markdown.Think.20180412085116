@@ -29,47 +29,41 @@
 	    $("#Viewer").html(marked(editor.getSession().getValue()));
 	})();
 	editor.session.on("changeScrollTop", function(scrollTop) {
-	    console.log('Editor: ' + scrollTop, + ' line: ' + editor.getFirstVisibleRow() + ' current: ' + editor.selection.getCursor().row)
-
-	    /* 
-	     * スクロール位置合わせアルゴリズムをどうするか？
-	     * 
-	     * コード1行毎にScrollTop()を保存する。（先頭からのpixcel数）
-	     * 
-	     * https://markdown-it.github.io/
-	     * おおよそスクロール連動できている。
-	     * 実装をみてみる。
-	     * コード1行ごとにパーサが出力HTMLのclass属性に`line`を出力している。
-	     * これをJSで解析し、その要素の高さを取得することで位置を算出している。
-	     * 
-	     * HTML要素に`line`class属性値があふれかえるので好ましくない。
-	     * だが、エクスポートするときに取り除けば問題ないか？
-	     * 
-	     * `p`, `h?`タグのときにclass='line'を付与するコード。
-	     * mdHtml.renderer.rules.paragraph_open = mdHtml.renderer.rules.heading_open = injectLineNumbers;
-	     * これを marked.js でできるか？
-	     * 可能だがDRYに書けない。APIの粒度が荒いため、要素ごとにHTML文字列を作成せねばならない。現実的でない。だが、`p`,`h?`の2種類だけなので2メソッドをオーバーライドすれば済む。
-	     * Renderer.prototype.paragraph = function(text) {
-	     * Renderer.prototype.heading = function(text, level, raw) {
-	     */
+	    //console.log('Editor: ' + scrollTop, + ' line: ' + editor.getFirstVisibleRow() + ' current: ' + editor.selection.getCursor().row)
+	    /*
+	    console.log('changeScrollTop');
+	    //console.log(editor.renderere.getScrollTopRow());
+	    var s = editor.getSession();
+	    console.log(s);
+	    
+	    var top_row = s.getScrollTopRow();
+	    var top_col = s.getLine(top_row).length;
+	    var btm_row = s.getScrollBottomRow();
+	    var btm_col = s.getLine(btm_row).length;
+	    //var top_row = editor.renderer.getScrollTopRow();
+	    //var top_col = editor.renderer.getLine(top_row).length;
+	    //var btm_row = editor.renderer.getScrollBottomRow();
+	    //var btm_col = editor.renderer.getLine(btm_row).length;
+	    //var top_row = s.renderer.getScrollTopRow();
+	    //var top_col = s.renderer.getLine(top_row).length;
+	    //var btm_row = s.renderer.getScrollBottomRow();
+	    //var btm_col = s.renderer.getLine(btm_row).length;
+	    var range = new ace.Range(top_row, top_col, btm_row, btm_col);
+	    SyncScroll(editor, range);
+	    */
 	})();
 	editor.session.selection.on("changeCursor", function(e){
+	    // エディタの先頭からキャレット位置までのMDにおけるHTML要素を取得する
 	    var c = editor.selection.getCursor();
-	    //console.log('Editor now row,col: ' + c.row +', ' + c.column);
-	    // 先頭からキャレット位置までのmarkdownを取得する。
-	    //var range = new ace.Range(0,0,c.row,c.column);//列数はその行の末尾にしたい
-	    //var range = new ace.Range(0,0,c.row,-1);//列数はその行の末尾にしたい
 	    var range = new ace.Range(0,0,c.row,editor.getSession().getLine(c.row).length);
-	    //editor.renderer.scrollCursorIntoView(range);
-	    //editor.renderer.scrollToLine(row)
+
+	    SyncScroll(editor, range);
+	    /*
 	    var parser = new DOMParser();
 	    var doc = parser.parseFromString(marked(editor.getSession().getTextRange(range)), 'text/html');
 	    var totalLines = doc.body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
-	    //console.log(range);
-	    //console.log(range.toString());
-	    //console.log(totalLines);
 
-	    // ビューア側の位置と比較して位置指定する
+	    // 上記とビューア側の要素の位置を比較して位置指定する
 	    var body = document.getElementById("Viewer");
 	    var elems = body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
 	    //console.log(elems);
@@ -77,15 +71,31 @@
 	    //console.log(elems[totalLines.length-1]);
 	    //console.log(elems[totalLines.length-1].offsetTop);
 	    if (elems.length > 0) {
-		$('#Viewer').scrollTop(elems[totalLines.length-1].offsetTop);
+		//$('#Viewer').scrollTop(elems[totalLines.length-1].offsetTop);
 		//var previewWrapper = document.getElementById("previewWrapper");
 		//previewWrapper.scrollTop = elems[totalLines.length].offsetTop;
+		var viewer = document.getElementById("Viewer");
+		viewer.scrollTop = elems[totalLines.length-1].offsetTop;
 	    }
 
 	    // この行までのコードをパースし、そのHTMLの表示高さピクセル数をとる？
 	    // HTMLコードから高さピクセル数を算出するライブラリが欲しい
+	    */
 	});
 	return editor;
+    }
+    function SyncScroll(editor, range) {
+	var parser = new DOMParser();
+	var doc = parser.parseFromString(marked(editor.getSession().getTextRange(range)), 'text/html');
+	var totalLines = doc.body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
+
+	// 上記とビューア側の要素の位置を比較して位置指定する
+	var body = document.getElementById("Viewer");
+	var elems = body.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table');
+	if (elems.length > 0) {
+	    var viewer = document.getElementById("Viewer");
+	    viewer.scrollTop = elems[totalLines.length-1].offsetTop;
+	}
     }
     function LoadDefaultMarkdown(editor) {
 	$.ajax({
