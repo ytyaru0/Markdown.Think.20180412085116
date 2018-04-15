@@ -19,6 +19,11 @@
     }
     function CreateEditor() {
 	var editor = ace.edit("Editor");
+	//editor.setOptions({
+	//  enableBasicAutocompletion: true,
+	//  enableSnippets: true,
+	//  enableLiveAutocompletion: true
+	//});
 	editor.setTheme("ace/theme/twilight");// 唯一背景黒＆箇条書き色分けされる
 	editor.setFontSize(14);
 	editor.getSession().setMode("ace/mode/markdown");
